@@ -1,42 +1,126 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Trading Consistency Calculator</title>
+    <title>30% Consistency Calculators</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f2f2f2; /* Light gray background */
+        }
+
+        h1 {
+            color: #333; /* Dark gray title color */
+            text-align: center;
         }
 
         input, button {
             margin-top: 5px;
+            padding: 8px;
+            border: 1px solid #ccc; /* Light gray border */
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50; /* Dark green button */
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Slightly lighter green on hover */
+        }
+
+        .calculator {
+            margin-bottom: 20px;
+            width: calc(33.33% - 20px); /* Adjust width as needed */
+            background-color: #fff; /* White background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+            display: inline-block; /* Ensures calculators are positioned side by side */
+            vertical-align: top; /* Aligns calculators to the top */
+            box-sizing: border-box; /* Include padding and border in width calculation */
         }
 
         .highlight {
-            background-color: #ffcccc;
+            background-color: #ffcccc; /* Light red highlight */
         }
 
         #tips {
-            margin-top: 20px;
-            background-color: #f7f7f7;
+            margin-bottom: 20px;
+            background-color: #fff; /* White background */
             border-left: 5px solid #ccc;
             padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+            font-size: 16px; /* Larger tip text size */
+            color: #333; /* Dark gray tip text color */
+        }
+
+        .tip {
+            margin-bottom: 10px;
+        }
+
+        .tip strong {
+            color: #4CAF50; /* Dark green tip link color */
+        }
+
+        .icon-link {
+            display: inline-block;
+            margin-right: 10px;
+            color: #4CAF50; /* Dark green link color */
+        }
+
+        .icon-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>Trading Consistency Calculator</h1>
-    <form id="profitForm">
-        <p>Enter your profits for each of the last 10 trading days:</p>
-        <div id="profitInputs"></div>
-        <button type="button" onclick="calculateConsistency()">Calculate</button>
-    </form>
-    <p id="result"></p>
+    <h1>30% Consistency Calculators</h1>
 
     <div id="tips">
-        <strong>Tips:</strong>
-        <p>The 30% rule applies to the profits made since the last approved payout. If the previous payout was denied due to the 30% rule, the calculation will consider the entire trading period since the last approved payout or the entire lifetime of the PA, whichever is applicable.</p>
+        <div class="tip">
+            <strong>Tips:</strong>
+            <div>
+                The 30% rule applies to the profits made since the last approved payout. If the previous payout was denied due to the 30% rule, the calculation will consider the entire trading period since the last approved payout or the entire lifetime of the PA, whichever is applicable.
+            </div>
+            <div>
+                The formula for calculating the 30% rule is: Total Profit * 0.30
+            </div>
+            <div class="additional-links">
+                <span class="icon-link">&#128279;</span><a href="https://support.atf.com/hc/en-us/articles/4404875002139-What-are-the-Consistency-Rules-for-PA-and-Funded-Accounts" target="_blank">Read KB Article</a> &bull; 
+                <span class="icon-link">&#128250;</span><a href="https://www.youtube.com/watch?v=RQSrZu7-LWc" target="_blank">Watch YouTube Video</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="calculator">
+        <h2>10-Day Profit Consistency Check</h2>
+        <form id="profitForm">
+            <p>Enter your profits for each of the last 10 trading days:</p>
+            <div id="profitInputs"></div>
+            <button type="button" onclick="calculateConsistency()">Calculate</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <div class="calculator">
+        <h2>Maximum Daily Profit Calculator</h2>
+        <p>Enter your total balance:</p>
+        <input type="number" id="totalBalance" placeholder="Total balance">
+        <button type="button" onclick="calculateMaxProfit()">Calculate</button>
+        <p id="maxProfitResult"></p>
+    </div>
+
+    <div class="calculator">
+        <h2>Single Day Profit Check</h2>
+        <p>Enter your highest single day profit and total profit:</p>
+        <input type="number" id="singleDayProfit" placeholder="Highest single day profit">
+        <input type="number" id="totalProfit" placeholder="Total profit">
+        <button type="button" onclick="checkSingleDayProfit()">Check</button>
+        <p id="singleDayResult"></p>
     </div>
 
     <script>
@@ -72,6 +156,20 @@
 
             const resultText = isConsistent ? "Your trading is consistent with the 30% rule." : "Warning: Your trading is not consistent with the 30% rule.";
             document.getElementById("result").innerText = resultText;
+        }
+
+        function checkSingleDayProfit() {
+            const singleDayProfit = parseFloat(document.getElementById("singleDayProfit").value) || 0;
+            const totalProfit = parseFloat(document.getElementById("totalProfit").value) || 0;
+            const isConsistent = singleDayProfit <= (totalProfit * 0.30);
+            const resultText = isConsistent ? "The single day profit is within the 30% limit." : "Warning: The single day profit exceeds the 30% limit.";
+            document.getElementById("singleDayResult").innerText = resultText;
+        }
+
+        function calculateMaxProfit() {
+            const totalBalance = parseFloat(document.getElementById("totalBalance").value) || 0;
+            const maxProfit = totalBalance * 0.30;
+            document.getElementById("maxProfitResult").innerText = `The maximum profit you can make in one day without breaching the 30% rule is: ${maxProfit.toFixed(2)}`;
         }
 
         createInputFields();
