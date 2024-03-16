@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trading Consistency Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        input, button {
+            margin-top: 5px;
+        }
+
+        .highlight {
+            background-color: #ffcccc;
+        }
+
+        #tips {
+            margin-top: 20px;
+            background-color: #f7f7f7;
+            border-left: 5px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trading Consistency Calculator</h1>
+    <form id="profitForm">
+        <p>Enter your profits for each of the last 10 trading days:</p>
+        <div id="profitInputs"></div>
+        <button type="button" onclick="calculateConsistency()">Calculate</button>
+    </form>
+    <p id="result"></p>
+
+    <div id="tips">
+        <strong>Tips:</strong>
+        <p>The 30% rule applies to the profits made since the last approved payout. If the previous payout was denied due to the 30% rule, the calculation will consider the entire trading period since the last approved payout or the entire lifetime of the PA, whichever is applicable.</p>
+    </div>
+
+    <script>
+        function createInputFields() {
+            for (let i = 0; i < 10; i++) {
+                const input = document.createElement("input");
+                input.setAttribute("type", "number");
+                input.setAttribute("id", "day" + (i + 1));
+                input.setAttribute("placeholder", "Profit for day " + (i + 1));
+                document.getElementById("profitInputs").appendChild(input);
+                document.getElementById("profitInputs").appendChild(document.createElement("br"));
+            }
+        }
+
+        function calculateConsistency() {
+            let totalProfit = 0;
+            let profits = [];
+            for (let i = 0; i < 10; i++) {
+                const profit = parseFloat(document.getElementById("day" + (i + 1)).value) || 0;
+                totalProfit += profit;
+                profits.push(profit);
+            }
+
+            let isConsistent = true;
+            for (let i = 0; i < 10; i++) {
+                if (profits[i] > totalProfit * 0.30) {
+                    document.getElementById("day" + (i + 1)).classList.add("highlight");
+                    isConsistent = false;
+                } else {
+                    document.getElementById("day" + (i + 1)).classList.remove("highlight");
+                }
+            }
+
+            const resultText = isConsistent ? "Your trading is consistent with the 30% rule." : "Warning: Your trading is not consistent with the 30% rule.";
+            document.getElementById("result").innerText = resultText;
+        }
+
+        createInputFields();
+    </script>
+</body>
+</html>
